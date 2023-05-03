@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts  
+Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="default" extends="json-default"> 
+	    <action name ="cookie" class="com.actions.cookies" method="init">
+			<result name=""></result>
+		</action>
+	 	<action name ="products" class="com.actions.productActions" method="productDetails">
+			<result name=""></result>
+		</action>
+ 	   <action name="signIn" class="com.actions.userActions" method="signIn">
+			<result name=""></result>
+		</action> 
+		<action name="signUp" class="com.actions.userActions" method="signUp">
+			<result name=""></result>
+		</action>
+		
+		<action name="cart" class="com.actions.productActions" method="addToCart">
+			<result name=""></result>
+		</action>
+	</package>
+</struts>  

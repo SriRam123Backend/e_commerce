@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<context-param>
+		<param-name>database_name</param-name>
+		<param-value>e_commerce</param-value>
+	</context-param>
+	<context-param>
+		<param-name>database_username</param-name>
+		<param-value>sriram</param-value>
+	</context-param>
+	<context-param>
+		<param-name>database_password</param-name>
+		<param-value>sriram</param-value>
+	</context-param>
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>  
+            org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter  
+        </filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+</web-app>
