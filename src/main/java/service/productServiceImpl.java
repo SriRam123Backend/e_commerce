@@ -132,4 +132,28 @@ public class productServiceImpl implements productService{
 		return newProduct;
 	}
 	
+	@Override
+	public int removeFromCart(JSONObject cartData) {
+		
+		int result = 0;
+		productDBC dao = productDBCImpl.getInstance();
+		
+		int productId = Integer.parseInt(cartData.get("productId").toString());
+		int userId= Integer.parseInt(cartData.get("userId").toString());
+		String colorName = cartData.get("color").toString();
+		
+		try {
+			int rs = dao.removefromCart(productId,userId,colorName);  
+			if(rs != 0)
+			{
+				result = rs;
+			}
+		} catch (SQLException err)
+		{
+			System.out.println("2"+ err.getMessage());
+		}
+		
+		return result;
+	
+	}
 }

@@ -14,4 +14,6 @@ public interface productDBC {
 	ResultSet allCartProducts(int userId) throws SQLException;
 	
 	ResultSet productDetails(int productId,int colorId) throws SQLException;
+	
+	int removefromCart(int productId,int userId,String colorName)throws SQLException;
 }

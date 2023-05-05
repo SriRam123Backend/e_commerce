@@ -14,4 +14,6 @@ public interface productService {
 	 cart allCartProducts(int userId);
 	 
 	 int addtoCart(JSONObject cartData);
+	 
+	 int removeFromCart(JSONObject cartData);
 }
