@@ -27,12 +27,24 @@ public class productActions {
     try {
       if (request.getMethod().equals("POST")) {
         ArrayList < product > products = productServiceImpl.getInstance().productDetails();
+        int userid = Integer.parseInt(request.getParameter("userID").toString());
         JSONObject productObject = new JSONObject();
+        if(userid != 0)
+        {
+            JSONObject cart = new JSONObject();
+      	    JSONObject cart2 = new JSONObject();
+      	    cart cartProducts = productServiceImpl.getInstance().allCartProducts(userid);  
+    		cart2.put("id",1);
+    		ArrayList<product> cartThings = cartProducts.getProducts();
+    		JSONObject cartproduct = productObject(cartThings,cartProducts.getId());
+    		cart.put("products",cartproduct);
+    		cart2.put("userId",cartProducts.getUserId());
+    		cart.put("cart",cart2);
+            productObject.put("cart",cart);
+        }
         JSONObject productsArray = productObject(products,0); 
-
         productObject.put("products",productsArray.get("products"));
         productObject.put("colors",productsArray.get("colors"));
-        System.out.println(productObject);
         response.getWriter().append(productObject.toJSONString());
         response.setStatus(HttpServletResponse.SC_OK);
       }
