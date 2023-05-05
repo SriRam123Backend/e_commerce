@@ -146,7 +146,7 @@ public class productServiceImpl implements productService{
 			int rs = dao.removefromCart(productId,userId,colorName);  
 			if(rs != 0)
 			{
-				result = rs;
+				result = userId;
 			}
 		} catch (SQLException err)
 		{

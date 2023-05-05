@@ -19,5 +19,8 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 		<action name="cart" class="com.actions.productActions" method="addToCart">
 			<result name=""></result>
 		</action>
+		<action name="remove" class="com.actions.productActions" method="removeFromtheCart">
+			<result name=""></result>
+		</action>
 	</package>
 </struts>  

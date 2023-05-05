@@ -80,6 +80,43 @@ public String addToCart()
   }
   
   @SuppressWarnings("unchecked")
+public String removeFromtheCart()
+  {
+	    HttpServletResponse response = ServletActionContext.getResponse();
+	    HttpServletRequest request = ServletActionContext.getRequest();
+	   try{ 
+	    if(request.getMethod().equals("POST"))
+	    {
+	    	JSONObject cartDetails = userActions.response();
+	    	JSONObject cart = new JSONObject();
+	    	
+	    	int result = productServiceImpl.getInstance().removeFromCart(cartDetails);
+	    	
+	    	if(result != 0)
+	    	{
+		    	  JSONObject cart2 = new JSONObject();
+		    	  cart cartProducts = productServiceImpl.getInstance().allCartProducts(result);  
+				    cart2.put("id",1);
+				    ArrayList<product> cartThings = cartProducts.getProducts();
+				    JSONObject cartproduct = productObject(cartThings,cartProducts.getId());
+				    cart.put("products",cartproduct);
+				    cart2.put("userId",cartProducts.getUserId());
+				    cart.put("cart",cart2);
+				    response.getWriter().append(cart.toJSONString());
+		    	    response.setStatus(HttpServletResponse.SC_OK);
+	    	}
+	    	else
+	    	{
+	    		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	    	}
+	     }
+	   }catch (IOException er) {
+	        System.out.println(er.getMessage());
+	    }
+	    return null;	  
+  }
+  
+  @SuppressWarnings("unchecked")
   public static JSONObject productObject(ArrayList<product> products,int cartId)
   {
       JSONArray productsArray = new JSONArray();
