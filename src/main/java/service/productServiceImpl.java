@@ -38,25 +38,8 @@ public class productServiceImpl implements productService{
 		try {
 			ResultSet rs = dao.productDetails();     
 			while(rs.next())
-			{  
-				int productId = rs.getInt(1);
-				String productName = rs.getString(2);
-				String description = rs.getString(3);
-			    float originalPrice = rs.getFloat(4);
-			    float currentPrice =rs.getFloat(5);
-			    String[] color = rs.getString(6).split(",");
-			    String imgSrc = rs.getString(7);
-			    String[] features = rs.getString(8).split("(?<=[.?!])\\s+");
-                
-			    price priceDetails = new price(originalPrice,currentPrice);
-			    List<color> colorDetails = new ArrayList<color>();
-			    for(String colorName : color)
-			    {
-			      color colorData = new color(colorName,imgSrc.replaceAll("colorName",colorName));
-			      colorDetails.add(colorData);
-			    }
-			    
-			    product newProduct = new product(productId,productName,description,priceDetails,features,colorDetails);
+			{   
+			    product newProduct = this.productDetails(rs);
 			    productDetail.add(newProduct);
 			}
 			return productDetail;
@@ -76,28 +59,11 @@ public class productServiceImpl implements productService{
 			ResultSet rs = dao.allCartProducts(userId);
 			while(rs.next())
 			{
-				ResultSet rs1 = dao.productDetails(rs.getInt(2)); 
+				ResultSet rs1 = dao.productDetails(rs.getInt(2),rs.getInt(4)); 
 				
 				while(rs1.next())
-				{
-					int productId = rs1.getInt(1);
-					String productName = rs1.getString(2);
-					String description = rs1.getString(3);
-				    float originalPrice = rs1.getFloat(4);
-				    float currentPrice =rs1.getFloat(5);
-				    String[] color = rs1.getString(6).split(",");
-				    String imgSrc = rs1.getString(7);
-				    String[] features = rs1.getString(8).split("(?<=[.?!])\\s+");
-	                
-				    price priceDetails = new price(originalPrice,currentPrice);
-				    List<color> colorDetails = new ArrayList<color>();
-				    for(String colorName : color)
-				    {
-				      color colorData = new color(colorName,imgSrc.replaceAll("colorName",colorName));
-				      colorDetails.add(colorData);
-				    }
-				    
-				    product cartProduct = new product(productId,productName,description,priceDetails,features,colorDetails);
+				{   
+				    product cartProduct = this.productDetails(rs1);
 				    cartProducts.add(cartProduct);
 				}
 				cartId = rs.getInt(1);
@@ -105,7 +71,7 @@ public class productServiceImpl implements productService{
 			return new cart(cartId,cartProducts,userId);
 		} catch (SQLException err)
 		{
-			System.out.println(err.getMessage());
+			System.out.println("3"+err.getMessage());
 		}
 		
 		return null;
@@ -119,20 +85,51 @@ public class productServiceImpl implements productService{
 		
 		int productId = Integer.parseInt(cartData.get("productId").toString());
 		int userId= Integer.parseInt(cartData.get("userId").toString());
+		String colorName = cartData.get("color").toString();
 		
 		try {
-			int rs = dao.addtoCart(productId,userId);  
+			int rs = dao.addtoCart(productId,userId,colorName);  
 			if(rs != 0)
 			{
 				result = userId;
 			}
 		} catch (SQLException err)
 		{
-			System.out.println(err.getMessage());
+			System.out.println("2"+ err.getMessage());
 		}
 		
 		return result;
 	}
 	
+	public product productDetails(ResultSet rs)
+	{
+		product newProduct = null;
+		try {
+			int productId = rs.getInt(1);
+			String productName = rs.getString(2);
+			String description = rs.getString(3);
+		    float originalPrice = rs.getFloat(4);
+		    float currentPrice =rs.getFloat(5);
+		    int colorId =  rs.getInt(6);
+		    String[] color = {rs.getString(7)};
+		    String imgSrc = rs.getString(8);
+		    String[] features = rs.getString(9).split("(?<=[.?!])\\s+");
+            
+		    price priceDetails = new price(originalPrice,currentPrice);
+		    List<color> colorDetails = new ArrayList<color>();
+		    for(String colorName : color)
+		    {
+		      color colorData = new color(colorId,colorName,imgSrc.replaceAll("colorName",colorName));
+		      colorDetails.add(colorData);
+		    }
+		    
+		     newProduct = new product(productId,productName,description,priceDetails,features,colorDetails);
+		} catch (SQLException er)
+		{
+			System.out.println(er.getMessage());
+		}
+	 	
+		return newProduct;
+	}
 	
 }

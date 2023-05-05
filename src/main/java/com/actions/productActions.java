@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
-import com.google.gson.Gson;
-
 import org.apache.struts2.ServletActionContext;
 import org.json.simple.JSONArray;
 
@@ -29,11 +27,12 @@ public class productActions {
     try {
       if (request.getMethod().equals("POST")) {
         ArrayList < product > products = productServiceImpl.getInstance().productDetails();
-        System.out.println(products);
         JSONObject productObject = new JSONObject();
-        JSONArray productsArray = productObject(products,0); 
+        JSONObject productsArray = productObject(products,0); 
 
-        productObject.put("products", productsArray);
+        productObject.put("products",productsArray.get("products"));
+        productObject.put("colors",productsArray.get("colors"));
+        System.out.println(productObject);
         response.getWriter().append(productObject.toJSONString());
         response.setStatus(HttpServletResponse.SC_OK);
       }
@@ -60,13 +59,10 @@ public String addToCart()
 	    	{
 	    	  JSONObject cart2 = new JSONObject();
 	    	  cart cartProducts = productServiceImpl.getInstance().allCartProducts(result);  
-		        Gson gson = new Gson();
-		        String json = gson.toJson(cartProducts);
-		        System.out.println(json);
-			  cart2.put("id",cartProducts.getId());
+			  cart2.put("id",1);
 			  ArrayList<product> cartThings = cartProducts.getProducts();
-			  JSONArray cartproduct = productObject(cartThings,cartProducts.getId());
-			  cart2.put("products",cartproduct);
+			  JSONObject cartproduct = productObject(cartThings,cartProducts.getId());
+			  cart.put("products",cartproduct);
 			  cart2.put("userId",cartProducts.getUserId());
 			  cart.put("cart",cart2);
 			  response.getWriter().append(cart.toJSONString());
@@ -84,16 +80,18 @@ public String addToCart()
   }
   
   @SuppressWarnings("unchecked")
-  public static JSONArray productObject(ArrayList<product> products,int cartId)
+  public static JSONObject productObject(ArrayList<product> products,int cartId)
   {
       JSONArray productsArray = new JSONArray();
+      JSONArray colorArray = new JSONArray();
+      JSONObject main = new JSONObject();
       for (product productDetails: products) {
       	JSONObject pro = new JSONObject();
       	if(cartId != 0)
       	{
-      		pro.put("cart",cartId);
+      		pro.put("cart",1);
       	}
-          pro.put("id", productDetails.getId());
+          pro.put("id",productDetails.getId());
           pro.put("name", productDetails.getName());
           pro.put("description", productDetails.getDescription());
           price pr = productDetails.getPrice();
@@ -106,20 +104,34 @@ public String addToCart()
           {
           	feature.add(eachFeature);
           }
-          pro.put("features",feature);
-          List<color> col = productDetails.getColors();
-          JSONArray col2 = new JSONArray();
-          for(color colour : col)
-          {   
+          pro.put("features",feature); 
+            List<color> col = productDetails.getColors();
+            JSONArray col2 = new JSONArray();
+            
+            for(color colour : col)
+            {   
               JSONObject pro2 = new JSONObject();
+              pro2.put("id",colour.getId());
+           	  if(cartId != 0)
+           	  {
+           		 pro2.put("cart",1);
+              }
+           	 
+              pro2.put("product",productDetails.getId()); 
               pro2.put("color",colour.getColor());
               pro2.put("image",colour.getImage());	
               col2.add(pro2);
+            }
+            
+            colorArray.add(col2);
+          if(!productsArray.contains(pro))
+          {
+        	  productsArray.add(pro);  
           }
-          pro.put("colors",col2);
-          productsArray.add(pro);
+          main.put("colors",colorArray);
+          main.put("products",productsArray);
       }
-      return productsArray;
+      return main;
   }
 }
 

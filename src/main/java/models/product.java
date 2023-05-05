@@ -11,7 +11,7 @@ public class product {
 	public String[] features;
 	public List<color> colors;
 	
-	public product(int id, String name, String description, models.price price, String[] features, List<color> colors) {
+	public product(int id, String name, String description,price price, String[] features, List<color> colors) {
 		super();
 		this.id = id;
 		this.name = name;

@@ -35,10 +35,8 @@ public class cookies {
           response.setStatus(HttpServletResponse.SC_NOT_FOUND);
       } else {
         for (int i = 0; i < cookie.length; i++) {
-        	System.out.println("console");
           if (cookie[i].getName().equals("sessionId")) {
             String userName = cookieDBCImpl.getInstance().getUserName(cookie[i].getValue());
-            System.out.println(userName);
             if (userName != null){
               request.setAttribute("userName", userName);
               userDetails userdata = userServiceImpl.getInstance().verifyValidUser(userName);

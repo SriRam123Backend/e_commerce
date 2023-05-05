@@ -2,13 +2,23 @@ package models;
 
 public class color{
 	
+	public int id;
 	public String color;
 	public String image;
-	
-	public color(String color, String image) {
+
+	public color(int id, String color, String image) {
 		super();
+		this.id = id;
 		this.color = color;
 		this.image = image;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getColor() {
@@ -26,6 +36,8 @@ public class color{
 	public void setImage(String image) {
 		this.image = image;
 	}
+	
+
 	
    
 
