@@ -133,17 +133,14 @@ public class productServiceImpl implements productService{
 	}
 	
 	@Override
-	public int removeFromCart(JSONObject cartData) {
+	public int removeFromCart(int colorId, int productId, int userId) {
 		
 		int result = 0;
 		productDBC dao = productDBCImpl.getInstance();
-		
-		int productId = Integer.parseInt(cartData.get("productId").toString());
-		int userId= Integer.parseInt(cartData.get("userId").toString());
-		String colorName = cartData.get("color").toString();
+
 		
 		try {
-			int rs = dao.removefromCart(productId,userId,colorName);  
+			int rs = dao.removefromCart(productId,userId,colorId);  
 			if(rs != 0)
 			{
 				result = userId;

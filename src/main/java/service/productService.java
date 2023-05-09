@@ -15,5 +15,5 @@ public interface productService {
 	 
 	 int addtoCart(JSONObject cartData);
 	 
-	 int removeFromCart(JSONObject cartData);
+	 int removeFromCart(int colorId,int productId,int userId);
 }

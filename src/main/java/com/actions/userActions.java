@@ -45,7 +45,7 @@ public class userActions {
 		return userDetails;
 
 	}
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked"})
 
 	public String signUp() {
 

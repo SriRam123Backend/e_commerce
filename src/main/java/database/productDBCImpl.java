@@ -84,22 +84,17 @@ public class productDBCImpl implements productDBC{
 	}
 	
 	@Override
-	public int removefromCart(int productId,int userId,String colorName) throws SQLException {
+	public int removefromCart(int productId,int userId,int colorId) throws SQLException {
        
 		int result = 0;
 		
 		String query = "delete from cartDetails where productId = ? and userId = ? and colorId = ?";
-		String queryOne = "select * from colorOftheProduct where colorName = ?";
 		PreparedStatement pstmt = DbConnection.dbConnection.prepareStatement(query);
-		PreparedStatement pstmtOne = DbConnection.dbConnection.prepareStatement(queryOne);
-		pstmtOne.setString(1,colorName);
-		ResultSet rs = pstmtOne.executeQuery();
-		if(rs.next())
-		{
-			pstmt.setInt(1,productId);
-			pstmt.setInt(2,userId);
-			pstmt.setInt(3, rs.getInt(1));
-		}
+
+		pstmt.setInt(1,productId);
+		pstmt.setInt(2,userId);
+		pstmt.setInt(3,colorId);
+			
 		result = pstmt.executeUpdate();
 		
 		return result;

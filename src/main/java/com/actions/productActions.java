@@ -91,41 +91,30 @@ public String addToCart()
 	    return null;	  
   }
   
-  @SuppressWarnings("unchecked")
 public String removeFromtheCart()
   {
 	    HttpServletResponse response = ServletActionContext.getResponse();
 	    HttpServletRequest request = ServletActionContext.getRequest();
-	   try{ 
-	    if(request.getMethod().equals("POST"))
-	    {
-	    	JSONObject cartDetails = userActions.response();
-	    	JSONObject cart = new JSONObject();
+	    if(request.getMethod().equals("PATCH"))
+	    {   
+//    		JSONObject cart = new JSONObject();
+    		
+	    	int userid = Integer.parseInt(request.getParameter("userId").toString());
+	    	int productId = Integer.parseInt(request.getParameter("productId").toString());
+	    	int colorId = Integer.parseInt(request.getParameter("id").toString());
 	    	
-	    	int result = productServiceImpl.getInstance().removeFromCart(cartDetails);
+	    	int result = productServiceImpl.getInstance().removeFromCart(colorId,productId,userid);
 	    	
 	    	if(result != 0)
 	    	{
-		    	  JSONObject cart2 = new JSONObject();
-		    	  cart cartProducts = productServiceImpl.getInstance().allCartProducts(result);  
-				    cart2.put("id",1);
-				    ArrayList<product> cartThings = cartProducts.getProducts();
-				    JSONObject cartproduct = productObject(cartThings,cartProducts.getId());
-				    cart.put("products",cartproduct);
-				    cart2.put("userId",cartProducts.getUserId());
-				    cart.put("cart",cart2);
-				    response.getWriter().append(cart.toJSONString());
-		    	    response.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
 	    	}
 	    	else
 	    	{
 	    		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	    	}
-	     }
-	   }catch (IOException er) {
-	        System.out.println(er.getMessage());
 	    }
-	    return null;	  
+	    return null;
   }
   
   @SuppressWarnings("unchecked")
